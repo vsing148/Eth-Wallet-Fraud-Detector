@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 export default function App() {
   const [address, setAddress] = useState('');
-  const [apiUrl, setApiUrl] = useState('http://localhost:8000');
+  const [apiUrl, setApiUrl] = useState('https://eth-wallet-fraud-detector.onrender.com');
   const [maxRecords, setMaxRecords] = useState('200');
 
   const [loading, setLoading] = useState(false);
