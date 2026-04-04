@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+pandas
+scikit-learn
+torch
+torch_geometric
+requests
+joblib
+python-dotenv

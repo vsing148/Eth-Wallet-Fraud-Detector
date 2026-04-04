@@ -1,0 +1,12 @@
+# Python / Backend ignores
+venv/
+backend/__pycache__/
+backend/.env
+transaction_dataset.csv
+
+# Mac OS ignores
+.DS_Store
+
+# Frontend ignores (just in case the frontend/.gitignore misses it)
+frontend/node_modules/
+frontend/dist/
