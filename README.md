@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🛡️ Recon
+# Eth Fraud Detector
 
 ### Real-Time Ethereum Fraud Detection via Graph Neural Networks
 
