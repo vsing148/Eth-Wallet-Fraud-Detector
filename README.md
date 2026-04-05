@@ -10,7 +10,7 @@
 [![React](https://img.shields.io/badge/react-Vite-61dafb.svg)](https://reactjs.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.104+-009688.svg)](https://fastapi.tiangolo.com/)
 
-**Recon** is a production-ready Web3 machine learning pipeline that uses a **Graph Neural Network (GNN)** to detect fraudulent Ethereum wallets in real-time.
+**Eth Wallet Fraud Detector** is a production-ready Web3 machine learning pipeline that uses a **Graph Neural Network (GNN)** to detect fraudulent Ethereum wallets in real-time.
 
 [Live Application](https://eth-wallet-fraud-detector.vercel.app) • [Report Bug](#) • [Request Feature](#)
 
