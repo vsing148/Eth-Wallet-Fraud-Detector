@@ -36,7 +36,9 @@ export default function App() {
   // Handle the progress bar animation when data loads
   useEffect(() => {
     if (data) {
-      setTimeout(() => setRiskWidth(data.fraud_probability_percent), 80);
+      // Small delay to ensure the element is in the DOM before animating
+      const timer = setTimeout(() => setRiskWidth(data.fraud_probability_percent), 100);
+      return () => clearTimeout(timer);
     } else {
       setRiskWidth(0);
     }
@@ -47,7 +49,7 @@ export default function App() {
 
     const trimmedAddr = address.trim();
     if (!/^0x[a-fA-F0-9]{40}$/.test(trimmedAddr)) {
-      setError("Invalid Ethereum address format.");
+      setError("Invalid Ethereum address format. Must be 0x followed by 40 hex characters.");
       setData(null);
       return;
     }
@@ -67,7 +69,7 @@ export default function App() {
       const result = await res.json();
       setData(result);
     } catch (err) {
-      setError(`Could not reach API at ${baseUrl}. Is your FastAPI server running?\n\n${err.message}`);
+      setError(`Scan failed: ${err.message}`);
     } finally {
       setLoading(false);
     }
@@ -87,8 +89,9 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#090c0b] text-[#e8f0ea] font-sans flex flex-col items-center pt-[60px] pb-[80px] px-5 selection:bg-[#00e676]/30">
 
-      {/* Injecting custom keyframes for the scan animation */}
+      {/* Custom Styles for Fonts and Keyframes */}
       <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=DM+Sans:wght@300;400;500&display=swap');
         
         .font-mono-custom { font-family: 'JetBrains Mono', monospace; }
         .font-sans-custom { font-family: 'DM Sans', sans-serif; }
@@ -134,7 +137,7 @@ export default function App() {
             disabled={loading}
             className="bg-[#00e676] text-[#001a0a] border-none rounded py-3.5 px-7 font-mono-custom text-[12px] font-semibold tracking-[0.08em] uppercase cursor-pointer whitespace-nowrap transition-all hover:opacity-85 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed shrink-0"
           >
-            Scan
+            {loading ? 'Scanning...' : 'Scan'}
           </button>
         </form>
 
@@ -242,20 +245,20 @@ export default function App() {
             <div className="bg-[#182019] border border-[#1e2b22] rounded-[5px] py-4 px-5">
               <div className="font-mono-custom text-[9px] tracking-[0.1em] uppercase text-[#3e5445] mb-2">Total transactions</div>
               <div className="font-mono-custom text-[22px] font-light text-[#e8f0ea] leading-none">
-                {data.top_features['Total Txs'].toLocaleString()}
+                {data.top_features?.['Total Txs']?.toLocaleString() || '0'}
               </div>
             </div>
             <div className="bg-[#182019] border border-[#1e2b22] rounded-[5px] py-4 px-5">
               <div className="font-mono-custom text-[9px] tracking-[0.1em] uppercase text-[#3e5445] mb-2">ETH Balance</div>
               <div className="font-mono-custom text-[22px] font-light text-[#e8f0ea] leading-none">
                 <span className="text-[11px] text-[#7a9882] ml-0.5 mr-1">Ξ</span>
-                {data.top_features['ETH Balance'].toFixed(4)}
+                {data.top_features?.['ETH Balance']?.toFixed(4) || '0.0000'}
               </div>
             </div>
             <div className="bg-[#182019] border border-[#1e2b22] rounded-[5px] py-4 px-5 col-span-2 md:col-span-1">
               <div className="font-mono-custom text-[9px] tracking-[0.1em] uppercase text-[#3e5445] mb-2">ERC-20 transfers</div>
               <div className="font-mono-custom text-[22px] font-light text-[#e8f0ea] leading-none">
-                {data.top_features['ERC20 Txs'].toLocaleString()}
+                {data.top_features?.['ERC20 Txs']?.toLocaleString() || '0'}
               </div>
             </div>
           </div>
@@ -276,11 +279,11 @@ export default function App() {
             </div>
             <div className="flex justify-between items-center py-2.5 border-b border-[#1e2b22]">
               <span className="font-mono-custom text-[11px] text-[#7a9882]">total_ether_balance</span>
-              <span className="font-mono-custom text-[12px] font-medium text-[#e8f0ea]">Ξ {data.top_features['ETH Balance'].toFixed(6)}</span>
+              <span className="font-mono-custom text-[12px] font-medium text-[#e8f0ea]">Ξ {data.top_features?.['ETH Balance']?.toFixed(6) || '0.000000'}</span>
             </div>
             <div className="flex justify-between items-center py-2.5 border-b border-[#1e2b22]">
               <span className="font-mono-custom text-[11px] text-[#7a9882]">total_ether_transactions</span>
-              <span className="font-mono-custom text-[12px] font-medium text-[#e8f0ea]">{data.top_features['Total Txs']}</span>
+              <span className="font-mono-custom text-[12px] font-medium text-[#e8f0ea]">{data.top_features?.['Total Txs'] || '0'}</span>
             </div>
             <div className="flex justify-between items-center py-2.5">
               <span className="font-mono-custom text-[11px] text-[#7a9882]">raw_prediction_class</span>
